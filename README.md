@@ -11,6 +11,7 @@ PW_OCR script usues [Pytesseract](https://github.com/madmaze/pytesseract) librar
 ## Algorithm
 
 ![Schema](images/Schemat1.png "Schema")
+![Schema](images/Schema1.gif "Schema")
 ## Parameters
 <dd>
 <b>Input polygon layer</b>
