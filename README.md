@@ -12,6 +12,11 @@ After installation you have to update path to your *Tesseract* directory at the 
 // path to your tesseract installation directory.
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 ```
+You may set *Pytesseract* configuration (page segmentation mode and OCR engine mode) using comboboxes of script graphical interface, but if you want to use language other than polish, you have to edit line below in the code:
+```Python
+text = pytesseract.image_to_string(img, lang='pol', config=self.config)
+```
+
 ## Algorithm
 
 ![Schema](images/Schemat1.png "Schema")
@@ -19,9 +24,11 @@ pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesse
 This algorithm iterates over all input polygon features and processes them according to the scheme below:
 - Exporting feature as separate *shapefile* in temporary file location.
 - Clipping raster overlaying the feature to the already made *shapefile* object boundaries and saving it into temporary file location (using *GDAL* library).
-- Regonizing text on the clipped raster image (*Pytesseract* library)
-
+- Regonizing text on the clipped raster image (*Pytesseract* library).
+- Adding recognized text as attribute value to output feature field.
+#
 ![screen](images/schema1.gif)
+
 ## Parameters
 <dd>
 <b>Input polygon layer</b>
