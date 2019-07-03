@@ -59,10 +59,10 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
         return self.tr('PW OCR')
 
     def group(self):
-        return self.tr('Example scripts')
+        return self.tr('PW')
 
     def groupId(self):
-        return 'examplescripts'
+        return 'pw'
 
     def shortHelpString(self):
         help = """This algorithm recognizes text from raster images inside input polygon features and saves as attribute value of output layer.\
@@ -178,11 +178,6 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
 
     def processAlgorithm(self, parameters, context, feedback):
 
-        self.source_layer = self.parameterAsLayer(
-            parameters,
-            self.INPUT,
-            context
-        )
         self.feature_source = self.parameterAsSource(
             parameters,
             self.INPUT,
@@ -231,13 +226,14 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
             self.feature_source.wkbType(),
             self.feature_source.sourceCrs()
         )
+        self.source_layer = self.feature_source.materialize(QgsFeatureRequest())
         feedback.pushInfo('Temporary files path: ' + str(temp_path))
         self.source_encod = self.source_layer.dataProvider().encoding()
-        context.setDefaultEncoding(self.source_encod)
+        '''context.setDefaultEncoding(self.source_encod)
         self.output_encod = context.defaultEncoding()
         
         feedback.pushInfo('sys.getdefaultencoding(): ' + sys.getdefaultencoding())
-        feedback.pushInfo('in: ' + self.source_encod + ', out: ' + self.output_encod)
+        feedback.pushInfo('in: ' + self.source_encod + ', out: ' + self.output_encod)'''
         
         if self.source_layer == None:
             list = QgsProject.instance().mapLayersByName(self.feature_source.sourceName())
@@ -245,7 +241,7 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
                 if self.feature_source.sourceCrs() == lyr.sourceCrs():
                     self.source_layer = lyr
                     
-        feedback.pushInfo('self.source_layer.name(): ' + self.source_layer.name())
+        #feedback.pushInfo('self.source_layer.name(): ' + self.source_layer.name())
     
         if self.feature_source is None:
             raise QgsProcessingException(self.invalidSourceError(parameters, self.INPUT))
@@ -258,7 +254,7 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
         
         '''here is tesseract config string'''
         self.config = '--psm '+str(psm)+' --oem '+str(oem)
-        feedback.pushInfo('self.config: ' + self.config)
+        feedback.pushInfo('Tessearct config: ' + self.config)
         
         '''creating temporary shp file, necessary for clipping'''
         self.crs = self.feature_source.sourceCrs().authid()
@@ -297,6 +293,7 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
         return {'Recognized': str(self.actual)}
         
     def OnThisRaster(self, feedback, Raster_lyr):
+        
         idsList = self.index.intersects(Raster_lyr.extent())
         if idsList:
             translateopts = gdal.TranslateOptions(
@@ -336,7 +333,7 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
         feedback.setProgress(self.actual/self.total*100)
         feedback.setProgressText(str(self.actual)+'/'+str(self.total) + '       ' +'id:  ' + str(feat.id()))
         feedback.pushCommandInfo(text)
-        feedback.pushCommandInfo(str(type(text)))
+        #feedback.pushCommandInfo(str(type(text)))
         
     def ClipRasterByPolygon(self, feedback, rasterPath, polygonPath, outputPath):
 
@@ -348,3 +345,4 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
                             dstNodata = 255.0,# to jest rozwiązanie wszystkich światowych problemów z dziedziny OCR
                             )
         ds = gdal.Warp(outputPath, rasterPath, options=warpopts)
+        #feedback.pushCommandInfo(str(ds))
