@@ -4,6 +4,7 @@
 <img src="images\qgis-logo.png" alt="qgis" width="200">
 
 QGIS processing algorithm which recognizes text from raster images inside input polygon features and saves as attribute value of output layer.
+
 PW_OCR_ADVENCED script processes in different way than [*PW_OCR_ADVANCED*](https://github.com/OskarGraszka/PW_OCR_ADVANCED). Check specifications of both scripts to choose better one for your applications.
 ## Python Tesseract
 PW_OCR script usues [*Pytesseract*](https://github.com/madmaze/pytesseract) library and requires its installation.
