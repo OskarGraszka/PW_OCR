@@ -4,7 +4,7 @@
 <img src="images\qgis-logo.png" alt="qgis" width="200">
 
 QGIS processing algorithm which recognizes text from raster images inside input polygon features and saves as attribute value of output layer.
-
+PW_OCR_ADVENCED script processes in different way than [*PW_OCR_ADVANCED*](https://github.com/OskarGraszka/PW_OCR_ADVANCED). Check specifications of both scripts to choose better one for your applications.
 ## Python Tesseract
 PW_OCR script usues [*Pytesseract*](https://github.com/madmaze/pytesseract) library and requires its installation.
 After installation you have to update path to your *Tesseract* directory at the beginning of the script.
@@ -12,7 +12,7 @@ After installation you have to update path to your *Tesseract* directory at the 
 // path to your tesseract installation directory.
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 ```
-You may set *Pytesseract* configuration (page segmentation mode and OCR engine mode) using comboboxes of script graphical interface, but if you want to use language other than polish, you have to edit line below in the code:
+You may set *Pytesseract* configuration (page segmentation mode and OCR engine model) using comboboxes of script graphical interface, but if you want to use language other than polish, you have to edit line below in the code:
 ```Python
 text = pytesseract.image_to_string(img, lang='pol', config=self.config)
 ```
@@ -21,13 +21,15 @@ text = pytesseract.image_to_string(img, lang='pol', config=self.config)
 
 ![Schema](images/Schemat1.png "Schema")
 
-This algorithm iterates over all input polygon features and processes them according to the scheme below:
+This algorithm iterates over all input polygon features and processes them according to this scheme:
 - Exporting feature as separate *shapefile* in temporary file location.
 - Clipping raster overlaying the feature to the already made *shapefile* object boundaries and saving it into temporary file location (using *GDAL* library).
 - Regonizing text on the clipped raster image (*Pytesseract* library).
 - Adding recognized text as attribute value to output feature field.
+
 #
 ![screen](images/schema1.gif)
+#
 
 ## Parameters
 <dd>
