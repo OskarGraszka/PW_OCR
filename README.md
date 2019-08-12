@@ -52,4 +52,11 @@ This algorithm iterates over all input polygon features and processes them accor
 <br><b>Temporary files location</b>
 <dd>Location of such transitional files like image translated to 8bit TIFF, image clipped to the single feature and shapefile contains only one feature. These files are created during iterating over all input features.</dd> 
 <br><b>Output layer</b>
-<dd>Location of the output layer with filled text attribute.</dd> 
+<dd>Location of the output layer with filled text attribute.</dd>
+</dd>
+
+## See also
+
+[*PW_OCR_ADVANCED*](https://github.com/OskarGraszka/PW_OCR_ADVANCED)
+
+[*PW_ABBREVIATIONS*](https://github.com/OskarGraszka/PW_ABBREVIATIONS)
