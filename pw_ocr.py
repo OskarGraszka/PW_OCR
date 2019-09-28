@@ -21,7 +21,6 @@ from qgis.core import (QgsProcessing,
                        QgsVectorLayer,
                        QgsVectorFileWriter,
                        QgsProject,
-                       #QgsProcessingContext
                        )
 import processing
 
@@ -35,22 +34,23 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 
-class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
-    # Constants used to refer to parameters and outputs. They will be
-    # used when calling the algorithm from another algorithm, or when
-    # calling from the QGIS console.
+class PW_OCR_Algorithm(QgsProcessingAlgorithm):
 
     INPUT = 'INPUT'
     RASTER_INPUT = 'RASTER INPUT'
     FIELD = 'FIELD'
     ALL_ACTIVE_RASTERS = 'ALL ACTIVE RASTERS'
+    PSM = 'PSM'
+    OEM = 'OEM'
+    REMOVE_COMMA = 'REMOVE_COMMA'
+    TEMP_FILES_LOC = 'TEMP_FILES_LOC'
     OUTPUT = 'OUTPUT'
 
     def tr(self, string):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self):
-        return ExampleProcessingAlgorithm()
+        return PW_OCR_Algorithm()
 
     def name(self):
         return 'pw_ocr'
@@ -121,7 +121,7 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
         )
         self.addParameter(
             QgsProcessingParameterEnum(
-                'PSM',
+                self.PSM,
                 self.tr('Page Segmentation Mode'),
                 options = [
                     'Orientation and script detection (OSD) only.',
@@ -144,7 +144,7 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
         )
         self.addParameter(
             QgsProcessingParameterEnum(
-                'OEM',
+                self.OEM,
                 self.tr('OCR Engine Model'),
                 options = [
                     'Legacy Tesseract',
@@ -157,14 +157,14 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
-                'Remove_comma',
+                self.REMOVE_COMMA,
                 self.tr('Remove comma'),
                 True
             )
         )
         self.addParameter(
             QgsProcessingParameterFolderDestination(
-                '',
+                self.TEMP_FILES_LOC,
                 self.tr('Temporary files location'),
                 optional = True
             )
@@ -290,7 +290,7 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
                 if layer.type() == 1 :
                     self.OnThisRaster(feedback, layer)
         
-        return {'Recognized': str(self.actual)}
+        return {self.OUTPUT: dest_id}
         
     def OnThisRaster(self, feedback, Raster_lyr):
         
@@ -333,7 +333,6 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
         feedback.setProgress(self.actual/self.total*100)
         feedback.setProgressText(str(self.actual)+'/'+str(self.total) + '       ' +'id:  ' + str(feat.id()))
         feedback.pushCommandInfo(text)
-        #feedback.pushCommandInfo(str(type(text)))
         
     def ClipRasterByPolygon(self, feedback, rasterPath, polygonPath, outputPath):
 
@@ -345,4 +344,3 @@ class ExampleProcessingAlgorithm(QgsProcessingAlgorithm):
                             dstNodata = 255.0,# to jest rozwiązanie wszystkich światowych problemów z dziedziny OCR
                             )
         ds = gdal.Warp(outputPath, rasterPath, options=warpopts)
-        #feedback.pushCommandInfo(str(ds))
