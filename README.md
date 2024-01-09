@@ -6,6 +6,14 @@
 QGIS processing algorithm which recognizes text from raster images inside input polygon features and saves as attribute value of output layer.
 
 PW_OCR_ADVENCED script processes in different way than [*PW_OCR_ADVANCED*](https://github.com/OskarGraszka/PW_OCR_ADVANCED). Check specifications of both scripts to choose better one for your applications.
+
+### Citing
+
+If usage of the script leads to a scientific publication, please acknowledge this fact by citing:
+
+<i>Graszka, O. (2021). Automatyzacja procesu rozpoznawania i weryfikacji nazw geograficznych ze źródeł historycznych na przykładzie Słownika geograficznego Królestwa Polskiego. W T. Epsztein (red.), Od Słownika geograficznego Królestwa Polskiego do map topograficznych Wojskowego Instytutu Geograficznego (s. 23–32).</i>
+
+
 ## Python Tesseract
 PW_OCR script usues [*Pytesseract*](https://github.com/madmaze/pytesseract) library and requires its installation.
 After installation you have to update path to your *Tesseract* directory at the beginning of the script.
